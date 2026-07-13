@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchServices, fetchStylists } from "../api/catalog";
+import { fetchServices, fetchStylists, fetchSalons } from "../api/catalog";
 import { getServiceImage } from "../utils/serviceImages";
 
 export default function Landing() {
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [stylists, setStylists] = useState([]);
+  const [salons, setSalons] = useState([]);
 
   const [serviceId, setServiceId] = useState("");
   const [stylistId, setStylistId] = useState("");
@@ -16,6 +17,7 @@ export default function Landing() {
   useEffect(() => {
     fetchServices().then(setServices).catch(() => setServices([]));
     fetchStylists().then(setStylists).catch(() => setStylists([]));
+    fetchSalons().then(setSalons).catch(() => setSalons([]));
   }, []);
 
   function handleCheckAvailability(e) {
