@@ -1,13 +1,31 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import include, path
 
 admin.site.site_header = settings.ADMIN_SITE_HEADER
 admin.site.site_title = settings.ADMIN_SITE_TITLE
 admin.site.index_title = settings.ADMIN_INDEX_TITLE
 
+
+def index(request):
+    return JsonResponse({
+        "status": "ok",
+        "service": "Purple backend",
+        "admin": request.build_absolute_uri("/admin/"),
+        "api": {
+            "auth": request.build_absolute_uri("/api/auth/"),
+            "salons": request.build_absolute_uri("/api/salons/"),
+            "services": request.build_absolute_uri("/api/services/"),
+            "stylists": request.build_absolute_uri("/api/stylists/"),
+            "bookings": request.build_absolute_uri("/api/bookings/"),
+        },
+    })
+
+
 urlpatterns = [
+    path("", index, name="index"),
     path("admin/", admin.site.urls),
     path("api/auth/", include("accounts.urls")),
     path("api/salons/", include("salons.urls")),
