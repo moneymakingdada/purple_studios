@@ -55,7 +55,7 @@ export default function StylistCalendar() {
 
   return (
     <div className="section" style={{ paddingBottom: 100 }}>
-      <div className="section-head" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", maxWidth: "none" }}>
+      <div className="section-head calendar-head">
         <div>
           <span className="eyebrow">Your week</span>
           <h2>
@@ -63,7 +63,7 @@ export default function StylistCalendar() {
             {days[6].toLocaleDateString(undefined, { month: "short", day: "numeric" })}
           </h2>
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
+        <div className="calendar-nav">
           <button className="btn-ghost btn-sm" onClick={() => setWeekStart((d) => { const nd = new Date(d); nd.setDate(nd.getDate() - 7); return nd; })}>← Prev</button>
           <button className="btn-ghost btn-sm" onClick={() => setWeekStart(startOfWeek(new Date()))}>Today</button>
           <button className="btn-ghost btn-sm" onClick={() => setWeekStart((d) => { const nd = new Date(d); nd.setDate(nd.getDate() + 7); return nd; })}>Next →</button>
@@ -72,55 +72,35 @@ export default function StylistCalendar() {
 
       {loading && <p className="loading-text">Loading your calendar…</p>}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 12 }}>
+      <div className="week-grid">
         {days.map((day) => {
           const dayBookings = bookingsForDay(day);
           const isToday = toISODate(day) === toISODate(new Date());
           return (
-            <div key={day.toISOString()} style={{ minHeight: 160 }}>
-              <div style={{
-                textAlign: "center", marginBottom: 10, padding: "6px 0", borderRadius: 10,
-                background: isToday ? "linear-gradient(120deg,var(--orchid),var(--violet))" : "transparent",
-                color: isToday ? "#fff" : "var(--ink)",
-              }}>
-                <div style={{ fontSize: "0.68rem", textTransform: "uppercase", fontWeight: 700, opacity: 0.8 }}>
-                  {day.toLocaleDateString(undefined, { weekday: "short" })}
-                </div>
-                <div style={{ fontFamily: "'Fraunces',serif", fontSize: "1.1rem" }}>{day.getDate()}</div>
+            <div key={day.toISOString()} className="calendar-day-col">
+              <div className={`calendar-day-header ${isToday ? "today" : ""}`}>
+                <div className="dow">{day.toLocaleDateString(undefined, { weekday: "short" })}</div>
+                <div className="dnum">{day.getDate()}</div>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {dayBookings.length === 0 && (
-                  <div style={{ fontSize: "0.72rem", color: "var(--muted)", textAlign: "center" }}>—</div>
-                )}
-                {dayBookings.map((b) => (
-                  <div
-                    key={b.id}
-                    className="card"
-                    style={{ padding: 10, borderLeft: `3px solid ${STATUS_COLORS[b.status]}` }}
-                  >
-                    <div style={{ fontSize: "0.72rem", fontWeight: 700 }}>{b.start_time?.slice(0, 5)}</div>
-                    <div style={{ fontSize: "0.76rem", marginTop: 2 }}>{b.service_name}</div>
-                    <div style={{ fontSize: "0.7rem", color: "var(--muted)", marginTop: 2 }}>{b.customer_name}</div>
-                    <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
-                      {b.status === "pending" && (
-                        <button className="btn-primary" style={{ padding: "4px 8px", fontSize: "0.65rem" }} onClick={() => handleAction(confirmBooking, b.id)}>
-                          Confirm
-                        </button>
-                      )}
-                      {b.status === "confirmed" && (
-                        <button className="btn-primary" style={{ padding: "4px 8px", fontSize: "0.65rem" }} onClick={() => handleAction(completeBooking, b.id)}>
-                          Complete
-                        </button>
-                      )}
-                      {(b.status === "pending" || b.status === "confirmed") && (
-                        <button className="btn-ghost" style={{ padding: "4px 8px", fontSize: "0.65rem" }} onClick={() => handleAction(cancelBooking, b.id)}>
-                          Cancel
-                        </button>
-                      )}
-                    </div>
+              {dayBookings.length === 0 && <div className="calendar-empty">—</div>}
+              {dayBookings.map((b) => (
+                <div key={b.id} className="card calendar-booking" style={{ borderLeft: `3px solid ${STATUS_COLORS[b.status]}` }}>
+                  <div className="time">{b.start_time?.slice(0, 5)}</div>
+                  <div className="service">{b.service_name}</div>
+                  <div className="customer">{b.customer_name}</div>
+                  <div className="calendar-booking-actions">
+                    {b.status === "pending" && (
+                      <button className="btn-primary" onClick={() => handleAction(confirmBooking, b.id)}>Confirm</button>
+                    )}
+                    {b.status === "confirmed" && (
+                      <button className="btn-primary" onClick={() => handleAction(completeBooking, b.id)}>Complete</button>
+                    )}
+                    {(b.status === "pending" || b.status === "confirmed") && (
+                      <button className="btn-ghost" onClick={() => handleAction(cancelBooking, b.id)}>Cancel</button>
+                    )}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           );
         })}

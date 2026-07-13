@@ -3,8 +3,8 @@ import { NavLink, Outlet } from "react-router-dom";
 export default function StylistLayout() {
   return (
     <div>
-      <div style={{ background: "var(--aubergine-deep)", padding: "0 6%" }}>
-        <div className="container" style={{ display: "flex", gap: 4, padding: 0 }}>
+      <div className="portal-subnav">
+        <div className="container portal-subnav-inner">
           <PortalTab to="/portal" end>Overview</PortalTab>
           <PortalTab to="/portal/calendar">Calendar</PortalTab>
           <PortalTab to="/portal/availability">Availability</PortalTab>
@@ -20,13 +20,7 @@ function PortalTab({ to, end, children }) {
     <NavLink
       to={to}
       end={end}
-      style={({ isActive }) => ({
-        padding: "16px 22px",
-        fontSize: "0.88rem",
-        fontWeight: 700,
-        color: isActive ? "var(--gold-soft)" : "#B79FCB",
-        borderBottom: isActive ? "2px solid var(--gold)" : "2px solid transparent",
-      })}
+      className={({ isActive }) => `portal-tab ${isActive ? "active" : ""}`}
     >
       {children}
     </NavLink>

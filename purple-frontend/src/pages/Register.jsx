@@ -5,7 +5,6 @@ import { useAuth } from "../context/AuthContext";
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
     email: "",
     username: "",
@@ -15,7 +14,6 @@ export default function Register() {
     password: "",
     password_confirm: "",
   });
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +25,6 @@ export default function Register() {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
       await register(form);
       navigate("/dashboard");
@@ -36,7 +33,6 @@ export default function Register() {
       const message = data
         ? Object.values(data).flat().join(" ")
         : "Something went wrong. Please try again.";
-
       setError(message);
     } finally {
       setLoading(false);
@@ -45,18 +41,12 @@ export default function Register() {
 
   return (
     <div className="auth-wrap">
-      <div className="auth-card register-card">
+      <div className="auth-card wide">
         <h1>Join Purple</h1>
         <p className="sub">Create an account to start booking.</p>
-
-        {error && (
-          <div className="form-banner-error">
-            {error}
-          </div>
-        )}
-
+        {error && <div className="form-banner-error">{error}</div>}
         <form onSubmit={handleSubmit}>
-          <div className="name-grid">
+          <div className="auth-name-row">
             <div className="field">
               <label>First name</label>
               <input
@@ -65,7 +55,6 @@ export default function Register() {
                 onChange={update("first_name")}
               />
             </div>
-
             <div className="field">
               <label>Last name</label>
               <input
@@ -75,7 +64,6 @@ export default function Register() {
               />
             </div>
           </div>
-
           <div className="field">
             <label>Username</label>
             <input
@@ -84,7 +72,6 @@ export default function Register() {
               onChange={update("username")}
             />
           </div>
-
           <div className="field">
             <label>Email</label>
             <input
@@ -94,7 +81,6 @@ export default function Register() {
               onChange={update("email")}
             />
           </div>
-
           <div className="field">
             <label>Phone (e.g. +233241234567)</label>
             <input
@@ -103,7 +89,6 @@ export default function Register() {
               placeholder="+233241234567"
             />
           </div>
-
           <div className="field">
             <label>Password</label>
             <input
@@ -113,7 +98,6 @@ export default function Register() {
               onChange={update("password")}
             />
           </div>
-
           <div className="field">
             <label>Confirm password</label>
             <input
@@ -123,15 +107,10 @@ export default function Register() {
               onChange={update("password_confirm")}
             />
           </div>
-
-          <button
-            className="btn-primary btn-block"
-            disabled={loading}
-          >
+          <button className="btn-primary btn-block" disabled={loading}>
             {loading ? "Creating account…" : "Create account"}
           </button>
         </form>
-
         <div className="auth-switch">
           Already have an account? <Link to="/login">Log in</Link>
         </div>

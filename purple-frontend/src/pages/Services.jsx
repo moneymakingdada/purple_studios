@@ -14,7 +14,7 @@ export default function Services() {
   }, []);
 
   return (
-    <div className="section services-page">
+    <div className="section" style={{ paddingBottom: 100 }}>
       <div className="section-head">
         <span className="eyebrow">Our menu</span>
         <h2>Every service, one purple standard.</h2>
@@ -22,24 +22,31 @@ export default function Services() {
 
       {loading && <p className="loading-text">Loading services…</p>}
       {!loading && categories.length === 0 && (
-        <p className="empty-text">No services found. Make sure the Django API is running and seeded (`python manage.py seed_demo`).</p>
+        <p className="empty-text">
+          No services found. Make sure the Django API is running and seeded
+          (`python manage.py seed_demo`).
+        </p>
       )}
 
       {categories.map((cat) => (
         <div key={cat.id} className="services-category">
-          <h3 className="services-category-title">{cat.name}</h3>
+          <h3>{cat.name}</h3>
           <div className="services-category-grid">
             {cat.services.map((s) => (
-              <Link to={`/services/${s.slug}`} key={s.id} className="card services-card">
-                <div className="services-card-image">
+              <Link
+                to={`/services/${s.slug}`}
+                key={s.id}
+                className="card service-card"
+              >
+                <div className="service-card-thumb">
                   <img src={getServiceImage(s)} alt={s.name} loading="lazy" />
                 </div>
-                <div className="services-card-body">
+                <div className="service-card-body">
                   <h4>{s.name}</h4>
-                  <p className="services-card-meta">
+                  <p>
                     {s.duration_minutes} min · {s.audience}
                   </p>
-                  <div className="services-card-price">GHS {s.price}</div>
+                  <div className="service-card-price">GHS {s.price}</div>
                 </div>
               </Link>
             ))}
