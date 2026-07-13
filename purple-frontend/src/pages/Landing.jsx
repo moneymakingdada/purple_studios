@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchServices, fetchStylists } from "../api/catalog";
 import { getServiceImage } from "../utils/serviceImages";
-import "./Landing.css";
 
 export default function Landing() {
   const navigate = useNavigate();

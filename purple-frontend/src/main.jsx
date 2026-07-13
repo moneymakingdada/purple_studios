@@ -15,7 +15,6 @@ import "./styles/Register.css";
 import "./styles/Navbar.css";
 import "./styles/Dashboard.css";
 import "./styles/stylist/StylistOverview.css";
-import ".styles/stylist/StylistCalendar.css";
 import "./styles/stylist/StylistAvailability.css";
 import "./styles/stylist/StylistLayout.css";
 
