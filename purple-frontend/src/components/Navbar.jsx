@@ -28,6 +28,7 @@ export default function Navbar() {
       <div className={`nav-links ${open ? "open" : ""}`}>
         <NavLink to="/services" onClick={close}>Services</NavLink>
         <NavLink to="/stylists" onClick={close}>Stylists</NavLink>
+        <NavLink to="/gallery" onClick={close}>Gallery</NavLink>
         {user && user.role === "stylist" && <NavLink to="/portal" onClick={close}>Stylist portal</NavLink>}
         {user && user.role !== "stylist" && <NavLink to="/dashboard" onClick={close}>My bookings</NavLink>}
         {user ? (

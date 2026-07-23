@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -34,5 +35,9 @@ urlpatterns = [
     path("api/bookings/", include("bookings.urls")),
 ]
 
-if settings.DEBUG:
+if not os.environ.get("CLOUDINARY_URL"):
+    # Serve media from local disk even outside DEBUG. Django never does this by
+    # default in production — fine for small scale / non-Render hosts with a
+    # persistent disk, but on Render specifically these files won't survive a
+    # redeploy. Set CLOUDINARY_URL in production to avoid that entirely.
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,6 +9,7 @@ from .models import Availability, PortfolioImage, StylistProfile, TimeOff
 from .permissions import IsStylist
 from .serializers import (
     AvailabilitySerializer,
+    GalleryImageSerializer,
     PortfolioImageSerializer,
     StylistProfileSerializer,
     TimeOffSerializer,
@@ -117,3 +118,17 @@ class MyPortfolioViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(stylist=self.request.user.stylist_profile)
+
+
+class GalleryListView(generics.ListAPIView):
+    """GET /api/stylists/gallery/ — every portfolio image across all stylists, public, newest first."""
+    serializer_class = GalleryImageSerializer
+    permission_classes = [permissions.AllowAny]
+    filterset_fields = ["stylist"]
+
+    def get_queryset(self):
+        return (
+            PortfolioImage.objects.select_related("stylist__user")
+            .filter(stylist__is_accepting_bookings=True)
+            .order_by("-id")
+        )

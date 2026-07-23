@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cloudinary",
 
     # third-party
     "rest_framework",
@@ -109,18 +110,33 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# Media storage: use Cloudinary whenever CLOUDINARY_URL is configured (production).
+# Falls back to local disk for local dev — NOT durable on Render, whose filesystem
+# is wiped on every redeploy/restart, which is why uploaded avatars/portfolio
+# images disappear (404) after a deploy unless Cloudinary is configured.
+if os.environ.get("CLOUDINARY_URL"):
+    CLOUDINARY_STORAGE = {"MEDIA_TAG": "purple"}
+
+
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": (
+            "cloudinary_storage.storage.MediaCloudinaryStorage"
+            if os.environ.get("CLOUDINARY_URL")
+            else "django.core.files.storage.FileSystemStorage"
+        ),
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
-
-MEDIA_URL = "media/"
-MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

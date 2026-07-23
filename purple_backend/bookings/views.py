@@ -89,19 +89,31 @@ class BookingViewSet(viewsets.ModelViewSet):
 
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-
+ 
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
-
+ 
     def get_queryset(self):
-        return Review.objects.select_related("booking")
-
+        return Review.objects.select_related("booking__customer", "booking__service", "booking__stylist__user")
+ 
     def perform_create(self, serializer):
         booking = serializer.validated_data["booking"]
         if booking.customer_id != self.request.user.id:
             from rest_framework.exceptions import PermissionDenied
-
+ 
             raise PermissionDenied("You can only review your own bookings.")
         serializer.save()
+ 
+    @action(detail=False, methods=["get"], url_path="featured", permission_classes=[permissions.AllowAny])
+    def featured(self, request):
+        """GET /api/bookings/reviews/featured/ — top-rated reviews with a comment, for public display."""
+        qs = (
+            self.get_queryset()
+            .filter(rating__gte=4)
+            .exclude(comment="")
+            .order_by("-rating", "-created_at")[:6]
+        )
+        return Response(self.get_serializer(qs, many=True).data)
+

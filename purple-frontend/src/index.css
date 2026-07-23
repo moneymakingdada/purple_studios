@@ -175,3 +175,110 @@ footer .cols div a{display:block;margin-bottom:8px;color:#B79FCB;}
 .auth-card.wide{ max-width: 480px; }
 .auth-name-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 @media(max-width:420px){ .auth-name-row{ grid-template-columns: 1fr; } }
+
+/* ============ MOTION: fade/slide-up on mount + scroll reveal ============ */
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(18px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn{
+  from{ opacity:0; }
+  to{ opacity:1; }
+}
+@media (prefers-reduced-motion: reduce){
+  .reveal, .reveal-stagger > *, .page-fade{ animation: none !important; opacity: 1 !important; transform: none !important; }
+}
+
+.reveal{
+  opacity: 0;
+  transform: translateY(18px);
+}
+.reveal.in-view{
+  animation: fadeUp 0.6s ease forwards;
+}
+
+/* Stagger children of a grid/list as they enter */
+.reveal-stagger > *{
+  opacity: 0;
+  transform: translateY(18px);
+}
+.reveal-stagger.in-view > *{
+  animation: fadeUp 0.5s ease forwards;
+}
+.reveal-stagger.in-view > *:nth-child(1){ animation-delay: 0.02s; }
+.reveal-stagger.in-view > *:nth-child(2){ animation-delay: 0.08s; }
+.reveal-stagger.in-view > *:nth-child(3){ animation-delay: 0.14s; }
+.reveal-stagger.in-view > *:nth-child(4){ animation-delay: 0.20s; }
+.reveal-stagger.in-view > *:nth-child(5){ animation-delay: 0.26s; }
+.reveal-stagger.in-view > *:nth-child(6){ animation-delay: 0.32s; }
+.reveal-stagger.in-view > *:nth-child(n+7){ animation-delay: 0.36s; }
+
+/* Whole-page fade on route change */
+.page-fade{ animation: fadeIn 0.35s ease; }
+
+/* Image fade-in once loaded, instead of popping in abruptly */
+.img-fade{ opacity: 0; transition: opacity 0.5s ease; }
+.img-fade.loaded{ opacity: 1; }
+
+/* Smooth hover lift for interactive cards (used by .card links) */
+a.card, .card.interactive{
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+a.card:hover, .card.interactive:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 26px 55px -22px rgba(43,10,61,0.32);
+}
+
+/* Buttons get a touch of life */
+.btn-primary, .btn-ghost{ transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease; }
+.btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 16px 34px -10px rgba(178,75,243,0.6); }
+.btn-ghost:hover{ transform: translateY(-1px); }
+.btn-primary:active, .btn-ghost:active{ transform: translateY(0); }
+
+/* ============ SKELETON LOADERS ============ */
+@keyframes shimmer{
+  0%{ background-position: -300px 0; }
+  100%{ background-position: 300px 0; }
+}
+.skeleton{
+  background: linear-gradient(90deg, #EFE4F7 25%, #F6EEFB 37%, #EFE4F7 63%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 12px;
+}
+.skeleton-thumb{ width: 100%; aspect-ratio: 4/3; border-radius: 16px 16px 0 0; }
+.skeleton-line{ height: 12px; margin: 8px 0; border-radius: 6px; }
+.skeleton-line.w-60{ width: 60%; }
+.skeleton-line.w-40{ width: 40%; }
+.skeleton-card{ overflow: hidden; }
+.skeleton-card-body{ padding: 20px; }
+
+.about-us-image{ border-radius: 20px; overflow: hidden; aspect-ratio: 4/3; }
+.about-us-copy h2{ font-size: 1.7rem; color: var(--aubergine-deep); margin: 12px 0 16px; }
+.about-us-copy p{ color: #5c4a68; margin-bottom: 14px; }
+
+
+.featured-reviews-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media(max-width:900px){ .featured-reviews-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media(max-width:600px){ .featured-reviews-grid{ grid-template-columns: 1fr; } }
+
+.featured-review-card{ padding: 26px; }
+.featured-review-card .stars{ color: var(--gold); font-size: 0.9rem; margin-bottom: 14px; }
+.featured-review-card .quote{ font-size: 0.95rem; color: var(--ink); margin-bottom: 16px; line-height: 1.5; }
+.featured-review-card .by{ font-weight: 700; font-size: 0.85rem; color: var(--violet); }
+.featured-review-card .meta{ font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+
+.locations-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.location-card{ padding: 24px; }
+.location-card h4{ font-size: 1.05rem; margin-bottom: 8px; }
+.location-card p{ color: var(--muted); font-size: 0.85rem; margin-bottom: 6px; }
+.location-card .phone{ font-weight: 700; color: var(--violet); font-size: 0.85rem; margin-top: 6px; }

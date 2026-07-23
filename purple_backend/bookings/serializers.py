@@ -6,9 +6,16 @@ from .models import Booking, Review
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    customer_first_name = serializers.CharField(source="booking.customer.first_name", read_only=True)
+    service_name = serializers.CharField(source="booking.service.name", read_only=True)
+    stylist_name = serializers.CharField(source="booking.stylist.user.get_full_name", read_only=True)
+ 
     class Meta:
         model = Review
-        fields = ("id", "booking", "rating", "comment", "created_at")
+        fields = (
+            "id", "booking", "rating", "comment", "created_at",
+            "customer_first_name", "service_name", "stylist_name",
+        )
         read_only_fields = ("id", "created_at")
 
 

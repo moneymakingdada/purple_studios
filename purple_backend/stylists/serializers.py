@@ -22,6 +22,14 @@ class PortfolioImageSerializer(serializers.ModelSerializer):
         model = PortfolioImage
         fields = ("id", "image", "caption", "order")
 
+class GalleryImageSerializer(serializers.ModelSerializer):
+    stylist_name = serializers.CharField(source="stylist.user.get_full_name", read_only=True)
+    stylist_title = serializers.CharField(source="stylist.title", read_only=True)
+ 
+    class Meta:
+        model = PortfolioImage
+        fields = ("id", "image", "caption", "stylist", "stylist_name", "stylist_title")
+
 
 class StylistProfileSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source="user.get_full_name", read_only=True)

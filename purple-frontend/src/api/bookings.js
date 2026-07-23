@@ -34,3 +34,8 @@ export async function leaveReview(bookingId, rating, comment) {
   const { data } = await client.post("/bookings/reviews/", { booking: bookingId, rating, comment });
   return data;
 }
+
+export async function fetchFeaturedReviews() {
+  const { data } = await client.get("/bookings/reviews/featured/");
+  return data;
+}

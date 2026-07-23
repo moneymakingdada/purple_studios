@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchServices, fetchStylists, fetchSalons } from "../api/catalog";
 import { getServiceImage } from "../utils/serviceImages";
+import AboutUs from "../components/AboutUs";
+import Locations from "../components/Locations";
+import FeaturedReviews from "../components/FeaturedReviews";
+import Reveal from "../components/Reveal";
+import FadeImage from "../components/FadeImage";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -114,50 +119,43 @@ export default function Landing() {
       </div>
 
       <section className="section">
-        <div className="section-head">
-          <span className="eyebrow">What we do</span>
-          <h2>Every service, one purple standard.</h2>
-        </div>
-        {services.length === 0 ? (
-          <p className="empty-text">Loading services… (make sure the Django API is running)</p>
-        ) : (
-          <div className="grid-4">
-            {services.slice(0, 4).map((s) => (
-              <Link to={`/services/${s.slug}`} key={s.id} className="card landing-service-card">
-                <div className="landing-service-thumb">
-                  <img src={getServiceImage(s)} alt={s.name} loading="lazy" />
+              <div className="section-head">
+                <span className="eyebrow">What we do</span>
+                <h2>Every service, one purple standard.</h2>
+              </div>
+              {services.length === 0 ? (
+                <div className="grid-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="card skeleton-card">
+                      <div className="skeleton skeleton-thumb" />
+                      <div className="skeleton-card-body">
+                        <div className="skeleton skeleton-line w-40" />
+                        <div className="skeleton skeleton-line w-60" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="landing-service-body">
-                  <span className="eyebrow">{s.category_name}</span>
-                  <h3>{s.name}</h3>
-                  <p>GHS {s.price} · {s.duration_minutes} min</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </section>
-
-         {/* ABOUT US */}
-      <div className="section">
-        <div className="split-hero even">
-          <div className="about-us-image">
-            <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=800&auto=format&fit=crop" alt="Purple team" />
-          </div>
-          <div className="about-us-copy">
-            <span className="eyebrow">About Purple</span>
-            <h2>Built for Accra, one chair at a time.</h2>
-            <p>
-              Purple started as a single studio in East Legon with one promise: no more waiting rooms, no more phone tag.
-              Every stylist, lash tech, and nail artist on our platform is vetted for craft and consistency.
-            </p>
-            <p>
-              Today we connect thousands of clients across Accra with the right specialist for their hair, skin, and nails —
-              booked in minutes, not calls.
-            </p>
-          </div>
-        </div>
-      </div>
+              ) : (
+                <Reveal stagger className="grid-4">
+                  {services.slice(0, 4).map((s) => (
+                    <Link to={`/services/${s.slug}`} key={s.id} className="card landing-service-card">
+                      <div className="landing-service-thumb">
+                        <FadeImage src={getServiceImage(s)} alt={s.name} />
+                      </div>
+                      <div className="landing-service-body">
+                        <span className="eyebrow">{s.category_name}</span>
+                        <h3>{s.name}</h3>
+                        <p>GHS {s.price} · {s.duration_minutes} min</p>
+                      </div>
+                    </Link>
+                  ))}
+                </Reveal>
+              )}
+            </section>
+      
+            <FeaturedReviews />
+      
+            <AboutUs />
 
 
       <div className="landing-cta-banner">
@@ -167,28 +165,7 @@ export default function Landing() {
       </div>
 
 
-      {/* LOCATIONS */}
-            <div className="section" style={{ paddingBottom: 100 }}>
-              <div className="section-head">
-                <span className="eyebrow">Find us</span>
-                <h2>Our studios</h2>
-              </div>
-              {salons.length === 0 ? (
-                <p className="empty-text">No studio locations available right now.</p>
-              ) : (
-                <div className="locations-grid">
-                  {salons.map((s) => (
-                    <div key={s.id} className="card location-card">
-                      <h4>{s.name}</h4>
-                      <p>{s.address}</p>
-                      <p>{s.city}, {s.region.replace("_", " ")}</p>
-                      <p>Open {s.opens_at?.slice(0, 5)} – {s.closes_at?.slice(0, 5)}</p>
-                      {s.phone && <p className="phone">{s.phone}</p>}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+       <Locations />
     </>
   );
 }

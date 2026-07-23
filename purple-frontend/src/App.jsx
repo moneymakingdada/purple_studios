@@ -8,6 +8,7 @@ import Services from "./pages/Services";
 import ServiceDetail from "./pages/ServiceDetail";
 import Stylists from "./pages/Stylists";
 import StylistProfile from "./pages/StylistProfile";
+import Gallery from "./pages/Gallery";
 import BookingFlow from "./pages/BookingFlow";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/services/:slug" element={<ServiceDetail />} />
         <Route path="/stylists" element={<Stylists />} />
         <Route path="/stylists/:id" element={<StylistProfile />} />
+        <Route path="/gallery" element={<Gallery />} />
         <Route path="/book" element={<BookingFlow />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

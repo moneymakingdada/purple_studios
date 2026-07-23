@@ -2,6 +2,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
+    GalleryListView,
     MyAvailabilityViewSet,
     MyPortfolioViewSet,
     MyStylistProfileView,
@@ -17,4 +18,6 @@ router.register("", StylistProfileViewSet, basename="stylist")
 
 urlpatterns = [
     path("me/", MyStylistProfileView.as_view(), name="my-stylist-profile"),
+
+    path("gallery/", GalleryListView.as_view(), name="gallery"),
 ] + router.urls
