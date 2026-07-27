@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "services",
     "stylists",
     "bookings",
+    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -177,3 +178,11 @@ CORS_ALLOW_CREDENTIALS = True
 ADMIN_SITE_HEADER = "Purple Admin"
 ADMIN_SITE_TITLE = "Purple Admin Portal"
 ADMIN_INDEX_TITLE = "Manage your salon platform"
+
+X_FRAME_OPTIONS = "SAMEORIGIN"  
+
+# --- SMS (Arkesel — Ghana SMS gateway) ---
+SMS_PROVIDER = os.environ.get("SMS_PROVIDER", "arkesel")
+ARKESEL_API_KEY = os.environ.get("ARKESEL_API_KEY", "")
+ARKESEL_SENDER_ID = os.environ.get("ARKESEL_SENDER_ID", "Purple")
+SMS_ENABLED = os.environ.get("SMS_ENABLED", "True") == "True"

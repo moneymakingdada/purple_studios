@@ -6,11 +6,11 @@ databases:
 
 services:
   - type: web
-    name: purple-studios
+    name: purple-backend
     runtime: python
     plan: free
     buildCommand: "./build.sh"
-    startCommand: "gunicorn config.wsgi:application"
+    startCommand: "gunicorn purple_backend.wsgi:application"
     envVars:
       - key: DJANGO_SECRET_KEY
         generateValue: true
@@ -26,3 +26,11 @@ services:
         fromDatabase:
           name: purple-db
           property: connectionString
+      - key: CLOUDINARY_URL
+        sync: false
+      - key: SMS_ENABLED
+        value: "True"
+      - key: ARKESEL_API_KEY
+        sync: false
+      - key: ARKESEL_SENDER_ID
+        value: "Purple"
